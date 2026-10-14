@@ -1,0 +1,10 @@
+import { z } from 'zod';
+import { company } from '@/data/content';
+export const contactSchema = z.object({ name: z.string().trim().min(2, 'Please enter your full name.').max(100), business: z.string().trim().max(100), phone: z.string().trim().regex(/^\+?[\d\s()-]{8,20}$/, 'Please enter a valid phone number.'), email: z.union([z.literal(''), z.string().trim().email('Please enter a valid email.').max(255)]), location: z.string().trim().min(2, 'Please enter the project location.').max(200), message: z.string().trim().min(10, 'Please share at least 10 characters about your project.').max(1500) });
+export type ContactValues = z.infer<typeof contactSchema>;
+export interface QuoteRequest extends ContactValues { category: string; requirements: Record<string, string> }
+export const categories = ['LED Screen', 'Glow Sign Board', 'ACP Board', 'Acrylic Signage', 'SS Golden Letters', 'Custom Signage', 'Advertising', 'Other'] as const;
+export const quoteSchema = contactSchema.extend({ category: z.enum(categories), requirements: z.record(z.string().max(300)) });
+export function whatsappUrl(message: string) { const validated = z.string().trim().min(1).max(6000).parse(message); return `${company.whatsapp}?text=${encodeURIComponent(validated)}`; }
+export function contactMessage(raw: ContactValues) { const d = contactSchema.parse(raw); return `Hello B.Idea, I would like to discuss a project.\n\nName: ${d.name}\nBusiness: ${d.business || 'Not specified'}\nPhone: ${d.phone}\nEmail: ${d.email || 'Not specified'}\nLocation: ${d.location}\n\nProject: ${d.message}`; }
+export function quoteMessage(raw: QuoteRequest) { const d = quoteSchema.parse(raw); return `Hello B.Idea, I would like a quotation.\n\nCategory: ${d.category}\n${Object.entries(d.requirements).map(([k,v]) => `${k}: ${v || 'Not specified'}`).join('\n')}\n\nName: ${d.name}\nBusiness: ${d.business || 'Not specified'}\nPhone: ${d.phone}\nEmail: ${d.email || 'Not specified'}\nLocation: ${d.location}\nAdditional details: ${d.message}`; }
