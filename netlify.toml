@@ -1,7 +1,7 @@
 [build]
   command = "npm run build"
-  # The Lovable TanStack configuration emits client assets here.
-  publish = ".output/public"
+  # Lovable's Nitro integration emits public assets here on Netlify CI.
+  publish = "dist"
 
 [build.environment]
   NODE_VERSION = "22"
