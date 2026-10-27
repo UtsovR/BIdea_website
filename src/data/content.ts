@@ -6,7 +6,7 @@ import storefront from '@/assets/storefront.jpg';
 export const images = { hero, indoor, signage, storefront };
 // Set VITE_SITE_URL in Netlify to the final production domain (including https).
 // The fallback keeps Netlify preview and first-production deploys crawlable.
-export const siteUrl = (import.meta.env.VITE_SITE_URL || 'https://bidea-website.netlify.app').replace(/\/$/, '');
+export const siteUrl = (import.meta.env["VITE_SITE_URL"] || 'https://bidea-website.netlify.app').replace(/\/$/, '');
 export const absoluteUrl = (path: string) => new URL(path, `${siteUrl}/`).toString();
 export interface CompanySettings { name: string; person: string; phone: string; alternativePhone: string; address: string; whatsapp: string; logo?: string }
 export const company: CompanySettings = { name: 'B.Idea', person: 'Hakim Mondal', phone: '+91 9007388414', alternativePhone: '+91 7003911345', address: 'Golf Green Daily Market, Kolkata – 700095, West Bengal, India.', whatsapp: 'https://wa.me/919007388414' };
